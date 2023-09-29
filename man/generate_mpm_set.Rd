@@ -12,6 +12,7 @@ generate_mpm_set(
   fecundity = 1.5,
   split = TRUE,
   by_type = TRUE,
+  as_compadre = TRUE,
   max_surv = 0.99,
   constraint = NULL,
   attempts = 1000
@@ -32,6 +33,10 @@ is TRUE.}
 \item{by_type}{A logical indicating whether the matrices should be returned
 in a list by type (A, U, F, C). If split is \code{FALSE}, then \code{by_type} must
 also be \code{FALSE}. Defaults to \code{TRUE}.}
+
+\item{as_compadre}{A logical indicating whether the matrices should be
+returned as a \code{CompadreDB} object. Default is \code{TRUE}. This requires
+argument \code{by_type} to be \code{TRUE}. If \code{FALSE}, the function returns a list.}
 
 \item{max_surv}{The maximum acceptable survival value. Defaults to 0.99. This
 is only used if \code{split = TRUE}.}
@@ -61,11 +66,12 @@ find a suitable matrix model, then an error is produced. However, the number
 of attempts can be altered with the \code{attempts} parameter.
 }
 \examples{
+set.seed(42) # set seed for repeatability
 
 # Basic operation, without splitting matrices and with no constraints
 generate_mpm_set(
   n = 10, n_stages = 5, fecundity = c(0, 0, 4, 8, 10),
-  archetype = 4, split = FALSE, by_type = FALSE
+  archetype = 4, split = FALSE, by_type = FALSE, as_compadre = FALSE
 )
 
 # Constrain outputs to A matrices with lambda between 0.9 and 1.1
@@ -76,7 +82,7 @@ constrain_df <- data.frame(
 )
 generate_mpm_set(
   n = 10, n_stages = 5, fecundity = c(0, 0, 4, 8, 10),
-  archetype = 4, constraint = constrain_df
+  archetype = 4, constraint = constrain_df, as_compadre = FALSE
 )
 
 # As above, but using popdemo::eigs function instead of popbio::lambda
@@ -88,7 +94,7 @@ constrain_df <- data.frame(
 )
 generate_mpm_set(
   n = 10, n_stages = 5, fecundity = c(0, 0, 4, 8, 10),
-  archetype = 4, constraint = constrain_df
+  archetype = 4, constraint = constrain_df, as_compadre = FALSE
 )
 
 # Multiple constraints
@@ -103,17 +109,17 @@ constrain_df <- data.frame(
 )
 generate_mpm_set(
   n = 10, n_stages = 5, fecundity = c(0, 0, 4, 8, 10),
-  archetype = 4, constraint = constrain_df
+  archetype = 4, constraint = constrain_df, as_compadre = FALSE
 )
 
 }
 \seealso{
 \code{\link[=random_mpm]{random_mpm()}} which this function is essentially a wrapper for.
 
-Other simulation: 
+Other Lefkovitch matrices: 
 \code{\link{random_mpm}()}
 }
 \author{
 Owen Jones \href{mailto:jones@biology.sdu.dk}{jones@biology.sdu.dk}
 }
-\concept{simulation}
+\concept{Lefkovitch matrices}

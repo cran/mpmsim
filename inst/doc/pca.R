@@ -3,25 +3,23 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(42)
 
-## ---- message=FALSE-----------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(mpmsim)
 library(Rage)
 library(Rcompadre)
 library(dplyr)
-library(ggfortify)
-library(viridis)
 library(popbio)
+library(ggfortify)
 
 ## -----------------------------------------------------------------------------
 set.seed(42)
 constrain_df <- data.frame(fun = "lambda", arg = NA, lower = 0.9, upper = 1.1)
-mpm_set <- generate_mpm_set(
+sim_life_hist_1 <- generate_mpm_set(
   n = 50, n_stages = 3, fecundity = c(0, 6, 6), archetype = 1, split = TRUE,
   max_surv = 0.95, constraint = constrain_df
 )
-
-sim_life_hist_1 <- cdb_build_cdb(mat_u = mpm_set$U_list, mat_f = mpm_set$F_list)
 
 ## -----------------------------------------------------------------------------
 sim_life_hist_1 <- cdb_flag(sim_life_hist_1, checks = "check_irreducible") %>%
@@ -45,15 +43,24 @@ gt_lt <- function(matU, matF, start = 1, ...) {
 }
 
 ## -----------------------------------------------------------------------------
-sim_life_hist_1$gt_lt <- mapply(gt_lt, sim_life_hist_1$matU, sim_life_hist_1$matF)
-sim_life_hist_1$longevity <- sapply(sim_life_hist_1$matU, Rage::longevity,
-  x_max = 1000, lx_crit = 0.01
-)
-sim_life_hist_1$lifeExpect <- sapply(sim_life_hist_1$matU, Rage::life_expect_mean)
-sim_life_hist_1$entropy_d <- mapply(
-  entropy_d, sim_life_hist_1$matU,
+sim_life_hist_1$gt_lt <- mapply(
+  gt_lt, sim_life_hist_1$matU,
   sim_life_hist_1$matF
 )
+sim_life_hist_1$longevity <- sapply(sim_life_hist_1$matU,
+  Rage::longevity,
+  x_max = 1000, lx_crit = 0.01
+)
+sim_life_hist_1$lifeExpect <- sapply(
+  sim_life_hist_1$matU,
+  Rage::life_expect_mean
+)
+sim_life_hist_1$entropy_d <- mapply(
+  entropy_d,
+  sim_life_hist_1$matU,
+  sim_life_hist_1$matF
+)
+
 sim_life_hist_1$entropy_k <- mapply(entropy_k, sim_life_hist_1$matU)
 sim_life_hist_1$nrr_R0 <- mapply(
   net_repro_rate, sim_life_hist_1$matU,
@@ -72,7 +79,7 @@ PCA <- prcomp(pcData, scale = TRUE, center = TRUE)
 pcData <- pcData %>%
   cbind(PCA$x[, 1:2])
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE------
+## ----fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE-------
 PCA_plot <- autoplot(
   object = PCA, alpha = 0, size = 4, fill = "#55616D60",
   loadings.colour = "#0072B2", shape = 16,
@@ -87,24 +94,23 @@ PCA_plot$layers <- c(
       x = pcData$PC1,
       y = pcData$PC2
     ),
-    size = 2, alpha = .5
+    size = 2, alpha = 0.5
   ),
   PCA_plot$layers
 )
 
 PCA_plot
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE, echo = FALSE----
+## ----fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE, echo = FALSE----
 ## -----------------------------------------------------------------------------
 set.seed(42)
 constrain_df <- data.frame(fun = "lambda", arg = NA, lower = 0.9, upper = 1.1)
 
-mpm_set <- generate_mpm_set(
+sim_life_hist_1 <- generate_mpm_set(
   n = 50, n_stages = 3, fecundity = c(0, 6, 6), archetype = 4,
   split = TRUE, constraint = constrain_df
 )
 
-sim_life_hist_1 <- cdb_build_cdb(mat_u = mpm_set$U_list, mat_f = mpm_set$F_list)
 
 ## -----------------------------------------------------------------------------
 sim_life_hist_1 <- cdb_flag(sim_life_hist_1, checks = "check_irreducible") %>%
@@ -128,16 +134,26 @@ gt_lt <- function(matU, matF, start = 1, ...) {
 }
 
 ## -----------------------------------------------------------------------------
-sim_life_hist_1$gt <- sapply(sim_life_hist_1$matA, popbio::generation.time)
-sim_life_hist_1$gt_lt <- mapply(gt_lt, sim_life_hist_1$matU, sim_life_hist_1$matF)
+sim_life_hist_1$gt <- sapply(
+  sim_life_hist_1$matA,
+  popbio::generation.time
+)
+sim_life_hist_1$gt_lt <- mapply(
+  gt_lt, sim_life_hist_1$matU,
+  sim_life_hist_1$matF
+)
 sim_life_hist_1$longevity <- sapply(sim_life_hist_1$matU, Rage::longevity,
   x_max = 1000, lx_crit = 0.01
 )
-sim_life_hist_1$lifeExpect <- sapply(sim_life_hist_1$matU, Rage::life_expect_mean)
+sim_life_hist_1$lifeExpect <- sapply(
+  sim_life_hist_1$matU,
+  Rage::life_expect_mean
+)
 sim_life_hist_1$entropy_d <- mapply(
   entropy_d, sim_life_hist_1$matU,
   sim_life_hist_1$matF
 )
+
 sim_life_hist_1$entropy_k <- mapply(entropy_k, sim_life_hist_1$matU)
 sim_life_hist_1$nrr_R0 <- mapply(
   net_repro_rate, sim_life_hist_1$matU,
@@ -175,7 +191,7 @@ PCA_plot$layers <- c(
       x = pcData$PC1,
       y = pcData$PC2
     ),
-    size = 2, alpha = .5
+    size = 2, alpha = 0.5
   ),
   PCA_plot$layers
 )

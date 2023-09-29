@@ -69,6 +69,8 @@ simulate_fecundity <- function(mean_fecundity, sample_size) {
 #' @author Owen Jones <jones@biology.sdu.dk>
 #' @family errors
 #' @examples
+#' set.seed(42) # set seed for repeatability
+#'
 #' mats <- make_leslie_mpm(
 #'   survival = c(0.1, 0.2, 0.5),
 #'   fertility = c(0, 1.2, 2.4),
@@ -120,7 +122,7 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
   }
 
   if (nrow(mat_F) != ncol(mat_F)) {
-    stop("mat_U is not a square matrix")
+    stop("mat_F is not a square matrix")
   }
 
   # Sample size validation
@@ -178,7 +180,7 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
   }
 
   if (!is.logical(split)) {
-    stop("split must be a logical value (TRUE/FALSE).")
+    stop("split must be a logical value.")
   }
 
   # Convert the matrix into a vector
@@ -273,11 +275,12 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
 #' @family errors
 #'
 #' @examples
+#' set.seed(42) # set seed for repeatability
+#'
 #' # First generate a set of MPMs
 #' mpm_set <- generate_mpm_set(n = 5, n_stages = 5, fecundity = c(
-#'   0, 0, 4, 8,
-#'   10
-#' ), archetype = 4, split = TRUE, by_type = TRUE)
+#'   0, 0, 4, 8, 10
+#' ), archetype = 4, split = TRUE, by_type = TRUE, as_compadre = FALSE)
 #'
 #' # Now apply sampling error to this set
 #' add_mpm_error(
@@ -299,7 +302,8 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
 #' # here with a sample size of 20 for reproduction and 10 for growth/survival.
 #' mpm_set <- generate_mpm_set(
 #'   n = 5, n_stages = 3, fecundity = c(0, 2, 4),
-#'   archetype = 4, split = TRUE, by_type = TRUE
+#'   archetype = 4, split = TRUE, by_type = TRUE,
+#'   as_compadre = FALSE
 #' )
 #'
 #' ssMats <- list(
@@ -331,7 +335,7 @@ add_mpm_error <- function(mat_U, mat_F, sample_size, split = TRUE,
   }
 
   if (inherits(mat_U, "list")) {
-    for (i in 1:length(mat_U)) {
+    for (i in seq_along(mat_U)) {
       if (!inherits(mat_U[[i]], "matrix")) {
         stop("Each element of mat_U must be a matrix.")
       }
@@ -343,7 +347,7 @@ add_mpm_error <- function(mat_U, mat_F, sample_size, split = TRUE,
   }
 
   if (inherits(mat_F, "list")) {
-    for (i in 1:length(mat_F)) {
+    for (i in seq_along(mat_F)) {
       if (!inherits(mat_F[[i]], "matrix")) {
         stop("Each element of mat_F must be a matrix.")
       }
@@ -365,7 +369,7 @@ add_mpm_error <- function(mat_U, mat_F, sample_size, split = TRUE,
 
   # Make a blank list to hold the output
   output_list <- list()
-  for (i in 1:length(mat_U)) {
+  for (i in seq_along(mat_U)) {
     output_list[[i]] <- add_mpm_error_indiv(
       mat_U = mat_U[[i]],
       mat_F = mat_F[[i]],

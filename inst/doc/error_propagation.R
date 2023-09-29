@@ -1,10 +1,11 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
 library(mpmsim)
+set.seed(42)
 
 ## -----------------------------------------------------------------------------
 matU <- matrix(c(
@@ -18,9 +19,12 @@ matF <- matrix(c(
 ), byrow = TRUE, nrow = 2)
 
 ## -----------------------------------------------------------------------------
-compute_ci(mat_U = matU, mat_F = matF, sample_size = 20, FUN = popdemo::eigs, what = "lambda")
+compute_ci(
+  mat_U = matU, mat_F = matF, sample_size = 20,
+  FUN = popdemo::eigs, what = "lambda"
+)
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 distLambda_20 <- compute_ci(
   mat_U = matU, mat_F = matF,
   sample_size = 20, FUN = popdemo::eigs, what = "lambda",
@@ -28,7 +32,7 @@ distLambda_20 <- compute_ci(
 )
 hist(distLambda_20$estimates)
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 distLambda_100 <- compute_ci(
   mat_U = matU, mat_F = matF,
   sample_size = 100, FUN = popdemo::eigs, what = "lambda",
@@ -74,7 +78,4 @@ par(mfrow = c(3, 1))
 hist(distLambda_20$estimates, xlim = c(0, 1.75))
 hist(distLambda_100$estimates, xlim = c(0, 1.75))
 hist(distLambda_variable$estimates, xlim = c(0, 1.75))
-
-## -----------------------------------------------------------------------------
-popdemo::elas(matU + matF)
 

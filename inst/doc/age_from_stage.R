@@ -3,8 +3,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+set.seed(42)
 
-## ---- message=FALSE-----------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
 library(mpmsim)
 library(dplyr)
 library(Rage)
@@ -12,7 +13,7 @@ library(Rage)
 ## -----------------------------------------------------------------------------
 b_1_values <- seq(0.1, 0.9, 0.1)
 lifeTables <- list()
-for (i in 1:length(b_1_values)) {
+for (i in seq_along(b_1_values)) {
   lifeTables[[i]] <- model_survival(
     params = c(b_0 = 0.1, b_1 = b_1_values[i]),
     model = "Gompertz"
@@ -20,15 +21,17 @@ for (i in 1:length(b_1_values)) {
 }
 
 ## -----------------------------------------------------------------------------
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   lifeTables[[i]] <- lifeTables[[i]] |>
-    mutate(stage = ifelse(x <= round(max(x) * 0.25), 1,
-      ifelse(x <= round(max(x) * 0.75), 2, 3)
+    mutate(stage = case_when(
+      x <= round(max(x) * 0.25) ~ 1,
+      x <= round(max(x) * 0.75) ~ 2,
+      TRUE ~ 3
     ))
 }
 
 ## -----------------------------------------------------------------------------
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   lifeTables[[i]] <- lifeTables[[i]] |>
     mutate(fert = model_fertility(
       age = x, params = c(A = 3),
@@ -42,7 +45,7 @@ lifeTables[[5]]
 
 ## -----------------------------------------------------------------------------
 leslie_matrices <- list()
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   leslie_matrices[[i]] <- make_leslie_mpm(
     survival = lifeTables[[i]]$px,
     fertility = lifeTables[[i]]$fert,
@@ -51,11 +54,11 @@ for (i in 1:length(lifeTables)) {
 }
 
 ## -----------------------------------------------------------------------------
-leslie_matrices[[5]]$matA
+leslie_matrices[[5]]$mat_A
 
 ## -----------------------------------------------------------------------------
 collapsed_matrices <- list()
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   stages <- lifeTables[[i]]$stage
   matrices <- leslie_matrices[[i]]
   collapse_list <- split(stages, stages)
@@ -73,7 +76,7 @@ collapsed_matrices[[5]]$matA
 
 ## -----------------------------------------------------------------------------
 recovered_life_tables <- list()
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   m1 <- collapsed_matrices[[i]]
   recovered_life_tables[[i]] <- Rage::mpm_to_table(
     matU = m1$matU, matF = m1$matF,
@@ -81,7 +84,7 @@ for (i in 1:length(lifeTables)) {
   )
 }
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 i <- 5
 recovered_lt <- recovered_life_tables[[i]]
 
@@ -92,7 +95,7 @@ plot(0:(length(recovered_lt$lx) - 1),
 )
 lines(lifeTables[[i]]$x, lifeTables[[i]]$lx, type = "l", col = "red")
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 plot(0:(length(recovered_lt$lx) - 1),
   recovered_lt$hx,
   type = "l",
@@ -100,9 +103,9 @@ plot(0:(length(recovered_lt$lx) - 1),
 )
 lines(lifeTables[[i]]$x, lifeTables[[i]]$hx, type = "l", col = "red")
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 df1 <- data.frame(b_1_values, lifespan_lt = NA, lifespan_afs = NA)
-for (i in 1:length(lifeTables)) {
+for (i in seq_along(lifeTables)) {
   df1$lifespan_lt[i] <- max(lifeTables[[i]]$x)
   df1$lifespan_afs[i] <- max(recovered_life_tables[[i]]$x)
 }
