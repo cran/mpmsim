@@ -5,7 +5,7 @@ knitr::opts_chunk$set(
 )
 set.seed(42)
 
-## ----message=FALSE------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 library(mpmsim)
 library(Rage)
 library(Rcompadre)
@@ -79,7 +79,7 @@ PCA <- prcomp(pcData, scale = TRUE, center = TRUE)
 pcData <- pcData %>%
   cbind(PCA$x[, 1:2])
 
-## ----fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE-------
+## ---- fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE------
 PCA_plot <- autoplot(
   object = PCA, alpha = 0, size = 4, fill = "#55616D60",
   loadings.colour = "#0072B2", shape = 16,
@@ -101,7 +101,7 @@ PCA_plot$layers <- c(
 
 PCA_plot
 
-## ----fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE, echo = FALSE----
+## ---- fig.height = 4, fig.width = 6, fig.align = "center", warning=FALSE, echo = FALSE----
 ## -----------------------------------------------------------------------------
 set.seed(42)
 constrain_df <- data.frame(fun = "lambda", arg = NA, lower = 0.9, upper = 1.1)

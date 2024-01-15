@@ -5,7 +5,7 @@ knitr::opts_chunk$set(
 )
 set.seed(42)
 
-## ----message=FALSE------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 library(mpmsim)
 library(dplyr)
 library(Rage)
@@ -84,7 +84,7 @@ for (i in seq_along(lifeTables)) {
   )
 }
 
-## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
+## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
 i <- 5
 recovered_lt <- recovered_life_tables[[i]]
 
@@ -95,7 +95,7 @@ plot(0:(length(recovered_lt$lx) - 1),
 )
 lines(lifeTables[[i]]$x, lifeTables[[i]]$lx, type = "l", col = "red")
 
-## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
+## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
 plot(0:(length(recovered_lt$lx) - 1),
   recovered_lt$hx,
   type = "l",
@@ -103,7 +103,7 @@ plot(0:(length(recovered_lt$lx) - 1),
 )
 lines(lifeTables[[i]]$x, lifeTables[[i]]$hx, type = "l", col = "red")
 
-## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
+## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
 df1 <- data.frame(b_1_values, lifespan_lt = NA, lifespan_afs = NA)
 for (i in seq_along(lifeTables)) {
   df1$lifespan_lt[i] <- max(lifeTables[[i]]$x)
