@@ -229,6 +229,19 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
     ncol = sqrt(length(u_matrix_vector))
   )
 
+  # Check that column sums of the simulated U matrix
+  # do not exceed 1. If they do, rescale them to sum to 1.
+  # Calculate column sums
+  col_sums <- colSums(mat_U_out)
+
+  # Rescale columns where column sum exceeds 1
+  over_one <- col_sums > 1
+  if (any(over_one)) {
+    mat_U_out[, over_one] <- mat_U_out[, over_one] / col_sums[over_one]
+  }
+  mat_U_out
+
+
   if (split) {
     return(list(
       mat_A = mat_U_out + mat_F_out,
@@ -278,9 +291,9 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
 #' set.seed(42) # set seed for repeatability
 #'
 #' # First generate a set of MPMs
-#' mpm_set <- generate_mpm_set(n = 5, n_stages = 5, fecundity = c(
+#' mpm_set <- rand_lefko_set(n = 5, n_stages = 5, fecundity = c(
 #'   0, 0, 4, 8, 10
-#' ), archetype = 4, split = TRUE, by_type = TRUE, as_compadre = FALSE)
+#' ), archetype = 4, output = "Type4")
 #'
 #' # Now apply sampling error to this set
 #' add_mpm_error(
@@ -300,10 +313,9 @@ add_mpm_error_indiv <- function(mat_U, mat_F, sample_size, split = TRUE) {
 #'
 #' # Sample size is a list of two matrices
 #' # here with a sample size of 20 for reproduction and 10 for growth/survival.
-#' mpm_set <- generate_mpm_set(
+#' mpm_set <- rand_lefko_set(
 #'   n = 5, n_stages = 3, fecundity = c(0, 2, 4),
-#'   archetype = 4, split = TRUE, by_type = TRUE,
-#'   as_compadre = FALSE
+#'   archetype = 4, output = "Type4"
 #' )
 #'
 #' ssMats <- list(

@@ -13,10 +13,17 @@ random_mpm(n_stages, fecundity, archetype = 1, split = FALSE)
 \item{fecundity}{Fecundity is the average number of offspring produced.
 Values can be provided in 4 ways:
 \itemize{
-\item An numeric vector of length 1 to provide a fecundity measure to the top right corner of the matrix model only.
-\item A numeric vector of integers of length equal to \code{n_stages} to provide fecundity estimates for the whole top row of the matrix model. Use 0 for cases with no reproduction.
-\item A matrix of numeric values of the same dimension as \code{n_stages} to provide fecundity estimates for the entire matrix model. Use 0 for cases with no reproduction.
-\item A list of two matrices of numeric values, both with the same dimension as \code{n_stages}, to provide lower and upper estimates of mean fecundity for the entire matrix model.
+\item An numeric vector of length 1 to provide a fecundity measure to the top
+right corner of the matrix model only.
+\item A numeric vector of integers of length equal to \code{n_stages} to provide
+fecundity estimates for the whole top row of the matrix model. Use 0 for
+cases with no reproduction.
+\item A matrix of numeric values of the same dimension as \code{n_stages} to
+provide fecundity estimates for the entire matrix model. Use 0 for cases
+with no reproduction.
+\item A list of two matrices of numeric values, both with the same dimension
+as \code{n_stages}, to provide lower and upper estimates of mean fecundity for
+the entire matrix model.
 In the latter case, a fecundity value will be drawn from a uniform
 distribution for the defined range. If there is no reproduction in a
 particular age class, use a value of 0 for both the lower and upper limit.
@@ -37,6 +44,9 @@ the matrix is split into separate fertility and a growth/survival matrices,
 returned as a list.
 }
 \description{
+This function is deprecated. Use \code{rand_lefko_mpm} instead.
+}
+\details{
 Generates a random matrix population model (MPM) with element values based on
 defined life history archetypes. Survival and transition/growth probabilities
 from any particular stage are restricted to be less than or equal to 1 by
@@ -62,8 +72,7 @@ with the further assumption that stage-specific survival increases as
 individuals increase in size/developmental stage. In this respect it is
 similar to archetype 2.
 }
-}
-\details{
+
 In all 4 of these Archetypes, fecundity is placed as a single element on the
 top right of the matrix, if it is a single value. If it is a vector of length
 \code{n_stages} then the fertility vector spans the entire top row of the matrix.
@@ -101,7 +110,9 @@ matrices. Population Ecology, 60(1), 37–47.
 the generation of large numbers of random matrices of this type.
 
 Other Lefkovitch matrices: 
-\code{\link{generate_mpm_set}()}
+\code{\link{generate_mpm_set}()},
+\code{\link{rand_lefko_mpm}()},
+\code{\link{rand_lefko_set}()}
 }
 \author{
 Owen Jones \href{mailto:jones@biology.sdu.dk}{jones@biology.sdu.dk}

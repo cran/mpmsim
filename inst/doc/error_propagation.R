@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -24,7 +24,7 @@ compute_ci(
   FUN = popdemo::eigs, what = "lambda"
 )
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 distLambda_20 <- compute_ci(
   mat_U = matU, mat_F = matF,
   sample_size = 20, FUN = popdemo::eigs, what = "lambda",
@@ -32,7 +32,7 @@ distLambda_20 <- compute_ci(
 )
 hist(distLambda_20$estimates)
 
-## ---- fig.height = 4, fig.width = 6, fig.align = "center"---------------------
+## ----fig.height = 4, fig.width = 6, fig.align = "center"----------------------
 distLambda_100 <- compute_ci(
   mat_U = matU, mat_F = matF,
   sample_size = 100, FUN = popdemo::eigs, what = "lambda",

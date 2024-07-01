@@ -1,6 +1,8 @@
 #' Generate lists of Lefkovitch matrix population models (MPMs) based on life
 #' history archetypes
 #'
+#' This function is deprecated. Use `rand_lefko_set` instead.
+#'
 #' This function generates a list of `n` MPMs according to the specified
 #' criteria. Criteria include the `archetype`, and the acceptable constraining
 #' criteria, which could include lambda, generation time or any other metric
@@ -18,12 +20,13 @@
 #'   is TRUE.
 #' @param by_type A logical indicating whether the matrices should be returned
 #'   in a list by type (A, U, F, C). If split is `FALSE`, then `by_type` must
-#'   also be `FALSE`. Defaults to `TRUE`.
+#'   is coerced to be `FALSE`. Defaults to `TRUE`.
 #' @param as_compadre A logical indicating whether the matrices should be
-#'   returned as a `CompadreDB` object. Default is `TRUE`. This requires
-#'   argument `by_type` to be `TRUE`. If `FALSE`, the function returns a list.
-#' @param max_surv The maximum acceptable survival value. Defaults to 0.99. This
-#'   is only used if `split = TRUE`.
+#'   returned as a `CompadreDB` object. Default is `TRUE`. If `FALSE`, the
+#'   function returns a list.
+#' @param max_surv The maximum acceptable survival value, calculated across all
+#'   transitions from a stage. Defaults to 0.99. This is only used if `split =
+#'   TRUE`.
 #' @param constraint An optional data frame with 4 columns named `fun`, `arg`,
 #'   `lower` and `upper`. These columns specify (1) a function that outputs a
 #'   metric derived from an A matrix and (2) an argument for the function (`NA`,
@@ -88,22 +91,30 @@
 #' @importFrom Rcompadre cdb_build_cdb
 #' @export generate_mpm_set
 
-generate_mpm_set <- function(n = 10, n_stages = 3, archetype = 1,
+generate_mpm_set <- function(n = 10,
+                             n_stages = 3,
+                             archetype = 1,
                              fecundity = 1.5,
-                             split = TRUE, by_type = TRUE, as_compadre = TRUE, max_surv = 0.99,
-                             constraint = NULL, attempts = 1000) {
+                             split = TRUE,
+                             by_type = TRUE,
+                             as_compadre = TRUE,
+                             max_surv = 0.99,
+                             constraint = NULL,
+                             attempts = 1000) {
+  .Deprecated("rand_lefko_set")
+
   # Check if n is a positive integer
   if (!min(abs(c(n %% 1, n %% 1 - 1))) < .Machine$double.eps^0.5 || n <= 0) {
     stop("n must be a positive integer")
   }
 
-  if (split == FALSE && by_type == TRUE) {
-    stop("If split is FALSE, then by_type must also be FALSE")
+  if (split == FALSE) {
+    if (by_type == TRUE) {
+      by_type <- FALSE
+      warning("Split is set to FALSE; by_type has been coerced to be FALSE")
+    }
   }
 
-  if (as_compadre == TRUE && by_type == FALSE) {
-    stop("If as_compadre is TRUE, then by_type must also be TRUE")
-  }
   # Set up empty list of desired length
   output_list <- vector("list", n)
 
@@ -202,6 +213,10 @@ generate_mpm_set <- function(n = 10, n_stages = 3, archetype = 1,
     }
   }
   if (by_type == FALSE) {
-    return(output_list)
+    if (as_compadre == FALSE) {
+      return(output_list)
+    } else {
+      return(cdb_build_cdb(mat_a = output_list))
+    }
   }
 }

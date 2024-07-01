@@ -1,3 +1,15 @@
+# mpmsim 3.0.0
+
+- When sets of matrices are returned as `CompadreDB` objects, the archetype (Lefkovitch) or model parameters (Leslie), are now included as metadata.
+- Added function `rand_leslie_set()` to generate sets of Leslie matrices where the parameters of the constituent mortality and fertility functions are drawn randomly from defined distributions. The function returns a `CompadreDB` object by default, but can also be set to produce lists of MPMs or life tables.
+- `generate_mpm_set()` is now deprecated, and will be removed at a later date. Users should use `rand_lefko_set()` instead. 
+- `random_mpm()` is now deprecated, and will be removed at a later date. Users should use `rand_lefko_mpm()` instead.
+- The new set generation functions omit the arguments `split`, `by_type` and `as_compadre`, which governed output types in `generate_mpm_set()`. These arguments been replaced with a simpler and more transparent argument, `output`.
+- Added new function `compute_ci_U()` which calculates confidence intervals for traits derived from matrix models where only the U submatrix is used. For example, life expectancy (using the function `Rage::life_expect_mean()`). 
+- Added a vignette for generating Leslie matrices.
+- Added a vignette for generating Lefkovitch matrices.
+
+
 # mpmsim 2.0.0
 
 - removed dependency on `MCMCpack`, which is reportedly being archived from CRAN. This change means that previous versions of `mpmsim` may not function correctly and it is advisable to update to the new version.
