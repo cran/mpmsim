@@ -55,8 +55,8 @@ represents age.
 \item Gompertz-Makeham: \eqn{h_x = b_0 \mathrm{e}^{b_1  x} + c}
 \item Exponential: \eqn{h_x = c}
 \item Siler: \eqn{h_x = a_0 \mathrm{e}^{-a_1  x} + c + b_0 \mathrm{e}^{b_1 x}}
-\item Weibull: \eqn{h_x = b_0  b_1  (b_1  x)^(b_0 - 1)}
-\item Weibull-Makeham: \eqn{h_x = b_0  b_1  (b_1  x)^(b_0 - 1) + c}
+\item Weibull: \eqn{h_x = b_0  b_1  (b_1  x)^{(b_0 - 1)}}
+\item Weibull-Makeham: \eqn{h_x = b_0  b_1  (b_1  x)^{(b_0 - 1)} + c}
 }
 
 In the output, the probability of survival (\code{px}) (and death (\code{qx}))
@@ -94,7 +94,7 @@ model_mortality(
   model = "WeibullMakeham"
 )
 
-model_mortality(params = c(b_0 = 0.1, b_1 = 0.2), model = "Gompertz")
+model_survival(params = c(b_0 = 0.1, b_1 = 0.2), model = "Gompertz")
 }
 \references{
 Cox, D.R. & Oakes, D. (1984) Analysis of Survival Data. Chapman
@@ -114,11 +114,11 @@ Vaupel, J., Manton, K. & Stallard, E. (1979) The impact of heterogeneity in
 individual frailty on the dynamics of mortality. Demography, 16, 439–454.
 }
 \seealso{
-\code{\link[=model_fertility]{model_fertility()}} to model age-specific fertility using various
-functions.
+\code{\link[=model_fecundity]{model_fecundity()}} to model age-specific reproductive output
+using various functions.
 
 Other trajectories: 
-\code{\link{model_fertility}()}
+\code{\link{model_fecundity}()}
 }
 \author{
 Owen Jones \href{mailto:jones@biology.sdu.dk}{jones@biology.sdu.dk}

@@ -36,7 +36,7 @@ modelled. If set to 0 (the default), no error is added.}
 
 \item{link}{A character string indicating the type of link function to use.
 Valid values are "\code{logit}" (the default) and "\code{log}", which are appropriate
-for survival (U submatrix) and reproduction (F submatrix) respectively.}
+for survival (U submatrix) and fecundity (F submatrix) respectively.}
 }
 \value{
 Depending on the input types, either a single value, a vector or a
@@ -106,13 +106,13 @@ driven_vital_rate(
 # with a series of drivers, and matrices of slopes and errors
 
 lt1 <- model_survival(params = c(b_0 = 0.4, b_1 = 0.5), model = "Gompertz")
-lt1$fert <- model_fertility(
+lt1$fecundity <- model_fecundity(
   age = 0:max(lt1$x), params = c(A = 10),
   maturity = 3, model = "step"
 )
 
 mats <- make_leslie_mpm(
-  survival = lt1$px, fertility = lt1$fert, n_stages =
+  survival = lt1$px, fecundity = lt1$fecundity, n_stages =
     nrow(lt1), split = TRUE
 )
 mats$mat_U

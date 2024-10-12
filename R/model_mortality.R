@@ -37,8 +37,8 @@
 #'   * Gompertz-Makeham: \eqn{h_x = b_0 \mathrm{e}^{b_1  x} + c}
 #'   * Exponential: \eqn{h_x = c}
 #'   * Siler: \eqn{h_x = a_0 \mathrm{e}^{-a_1  x} + c + b_0 \mathrm{e}^{b_1 x}}
-#'   * Weibull: \eqn{h_x = b_0  b_1  (b_1  x)^(b_0 - 1)}
-#'   * Weibull-Makeham: \eqn{h_x = b_0  b_1  (b_1  x)^(b_0 - 1) + c}
+#'   * Weibull: \eqn{h_x = b_0  b_1  (b_1  x)^{(b_0 - 1)}}
+#'   * Weibull-Makeham: \eqn{h_x = b_0  b_1  (b_1  x)^{(b_0 - 1)} + c}
 #'
 #'   In the output, the probability of survival (`px`) (and death (`qx`))
 #'   represent the probability of individuals that enter the age interval
@@ -93,8 +93,8 @@
 #'   model = "WeibullMakeham"
 #' )
 #'
-#' @seealso [model_fertility()] to model age-specific fertility using various
-#'   functions.
+#' @seealso [model_fecundity()] to model age-specific reproductive output
+#'   using various functions.
 #' @export
 model_survival <- function(params, age = NULL, model, truncate = 0.01) {
   # Coerce model type to lower case to avoid irritation
@@ -223,7 +223,7 @@ model_survival <- function(params, age = NULL, model, truncate = 0.01) {
 
 #' @rdname model_survival
 #' @examples
-#' model_mortality(params = c(b_0 = 0.1, b_1 = 0.2), model = "Gompertz")
+#' model_survival(params = c(b_0 = 0.1, b_1 = 0.2), model = "Gompertz")
 #' @export
 model_mortality <- model_survival
 

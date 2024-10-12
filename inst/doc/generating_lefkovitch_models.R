@@ -16,19 +16,19 @@ library(Rcompadre)
 rand_lefko_mpm(n_stages = 3, fecundity = 5, archetype = 2)
 
 ## -----------------------------------------------------------------------------
-lower_fert <- matrix(c(
+lower_reprod <- matrix(c(
   0, 0, 0,
   0, 0, 0,
   0, 0, 0
 ), nrow = 3, ncol = 3, byrow = TRUE)
-upper_fert <- matrix(c(
+upper_reprod <- matrix(c(
   0, 4, 20,
   0, 0, 0,
   0, 0, 0
 ), nrow = 3, ncol = 3, byrow = TRUE)
 
 rand_lefko_mpm(
-  n_stages = 3, fecundity = list(lower_fert, upper_fert),
+  n_stages = 3, fecundity = list(lower_reprod, upper_reprod),
   archetype = 2
 )
 

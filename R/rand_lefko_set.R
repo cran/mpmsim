@@ -13,22 +13,22 @@
 #' @param n_models An integer indicating the number of MPMs to generate.
 #' @param n_stages The number of stages for the MPMs. Default is `3`.
 #' @param archetype The archetype of the MPMs. Default is `1`.
-#' @param fecundity Fecundity is the average number of offspring produced.
+#' @param fecundity The average number of offspring produced (fecundity).
 #'   Values can be provided in 4 ways:
-#'   - An numeric vector of length 1 providing a single fecundity measure to the
-#'   top right corner of the matrix model only.
+#'   - An numeric vector of length 1 providing a single measure of fecundity
+#'   to the top right corner of the matrix model only.
 #'   - A numeric vector of integers of length equal to `n_stages` to provide
 #'   fecundity estimates for the whole top row of the matrix model. Use 0 for
-#'   cases with no reproduction.
+#'   cases with no fecundity.
 #'   - A matrix of numeric values of the same dimension as `n_stages` to provide
 #'   fecundity estimates for the entire matrix model. Use 0 for cases with no
-#'   reproduction.
+#'   fecundity.
 #'   - A list of two matrices of numeric values, both with the same dimension as
 #'   `n_stages`, to provide lower and upper limits of mean fecundity for the
 #'   entire matrix model.
 #'
 #'   In the latter case, a fecundity value will be drawn from a uniform
-#'   distribution for the defined range. If there is no reproduction in a
+#'   distribution for the defined range. If there is no fecundity in a
 #'   particular age class, use a value of 0 for both the lower and upper limit.
 #'
 #' @param output Character string indicating the type of output.

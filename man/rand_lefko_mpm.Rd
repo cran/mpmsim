@@ -10,40 +10,41 @@ rand_lefko_mpm(n_stages, fecundity, archetype = 1, split = TRUE)
 \arguments{
 \item{n_stages}{An integer defining the number of stages for the MPM.}
 
-\item{fecundity}{Fecundity is the average number of offspring produced.
+\item{fecundity}{A measure of reproductive output. The average number
+of offspring produced per projection interval from each stage.
 Values can be provided in 4 ways:
 \itemize{
 \item An numeric vector of length 1 to provide a single fecundity measure to
 the top right corner of the matrix model only.
 \item A numeric vector of integers of length equal to \code{n_stages} to provide
 fecundity estimates for the whole top row of the matrix model. Use 0 for
-cases with no reproduction.
+cases with no fecundity.
 \item A matrix of numeric values of the same dimension as \code{n_stages} to provide
 fecundity estimates for the entire matrix model. Use 0 for cases with no
-reproduction.
+fecundity.
 \item A list of two matrices of numeric values, both with the same dimension as
 \code{n_stages}, to provide lower and upper limits of mean fecundity for the
 entire matrix model. Use 0 for both lower and upper limits in cases with no
-reproduction.
+fecundity.
 }
 
 In the latter case, a fecundity value will be drawn from a uniform
-distribution for the defined range. If there is no reproduction in a
+distribution for the defined range. If there is no fecundity in a
 particular age class, use a value of 0 for both the lower and upper limit.}
 
 \item{archetype}{Indication of which life history archetype should be used,
 based on Takada et al. 2018. An integer between 1 and 4.}
 
 \item{split}{\code{TRUE}/\code{FALSE}, indicating whether the matrix produced should be
-split into a survival matrix and a fertility matrix. If true, then the
-output becomes a list with a matrix in each element. Otherwise, the output
-is a single matrix. Default is \code{TRUE}}
+split into a survival matrix and a reproductive output matrix. If true,
+then the output becomes a list with a matrix in each element. Otherwise,
+the output is a single matrix. Default is \code{TRUE}.}
 }
 \value{
 Returns a random matrix population model with characteristics
 determined by the archetype selected and fecundity vector. If split = TRUE,
-the matrix is split into separate fertility and a growth/survival matrices,
-returned as a list.
+the matrix is split into separate reproductive output and growth/survival
+matrices, returned as a list.
 }
 \description{
 Generates a random matrix population model (MPM) with element values based on
@@ -73,9 +74,10 @@ similar to archetype 2.
 }
 }
 \details{
-In all 4 of these Archetypes, fecundity is placed as a single element on the
-top right of the matrix, if it is a single value. If it is a vector of length
-\code{n_stages} then the fertility vector spans the entire top row of the matrix.
+In all 4 of these Archetypes, reproductive output is placed as a
+single element on the top right of the matrix, if it is a single value. If it
+is a vector of length \code{n_stages} then the fecundity vector spans the entire
+top row of the matrix.
 
 The function is constrained to only output ergodic matrices.
 }

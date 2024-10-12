@@ -1,3 +1,9 @@
+# mpmsim 3.1.0
+
+- Added function synonym: `model_reproduction()` is synonymous with `model_fertility` and `model_fecundity`.
+- Improved documentation including to the three vignettes focussing on Leslie models, Lefkovitch models, and error propagation respectively.
+- Fixed minor typographical errors in other documentation.
+
 # mpmsim 3.0.0
 
 - When sets of matrices are returned as `CompadreDB` objects, the archetype (Lefkovitch) or model parameters (Leslie), are now included as metadata.

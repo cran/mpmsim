@@ -25,9 +25,10 @@
 #' individuals increase in size/developmental stage. In this respect it is
 #' similar to archetype 2.
 #'
-#' In all 4 of these Archetypes, fecundity is placed as a single element on the
-#' top right of the matrix, if it is a single value. If it is a vector of length
-#' `n_stages` then the fertility vector spans the entire top row of the matrix.
+#' In all 4 of these Archetypes, reproductive output is placed as a
+#' single element on the top right of the matrix, if it is a single value. If it
+#' is a vector of length `n_stages` then the fecundity vector spans the entire
+#' top row of the matrix.
 #'
 #' The function is constrained to only output ergodic matrices.
 #'
@@ -44,35 +45,36 @@
 #' matrices. Population Ecology, 60(1), 37–47.
 #'
 #' @param n_stages An integer defining the number of stages for the MPM.
-#' @param fecundity Fecundity is the average number of offspring produced.
+#' @param fecundity A measure of reproductive output. The average number
+#'   of offspring produced per projection interval from each stage.
 #'   Values can be provided in 4 ways:
 #'   - An numeric vector of length 1 to provide a single fecundity measure to
 #'   the top right corner of the matrix model only.
 #'   - A numeric vector of integers of length equal to `n_stages` to provide
 #'   fecundity estimates for the whole top row of the matrix model. Use 0 for
-#'   cases with no reproduction.
+#'   cases with no fecundity.
 #'   - A matrix of numeric values of the same dimension as `n_stages` to provide
 #'   fecundity estimates for the entire matrix model. Use 0 for cases with no
-#'   reproduction.
+#'   fecundity.
 #'   - A list of two matrices of numeric values, both with the same dimension as
 #'   `n_stages`, to provide lower and upper limits of mean fecundity for the
 #'   entire matrix model. Use 0 for both lower and upper limits in cases with no
-#'   reproduction.
+#'   fecundity.
 #'
 #'   In the latter case, a fecundity value will be drawn from a uniform
-#'   distribution for the defined range. If there is no reproduction in a
+#'   distribution for the defined range. If there is no fecundity in a
 #'   particular age class, use a value of 0 for both the lower and upper limit.
 #' @param archetype Indication of which life history archetype should be used,
 #'   based on Takada et al. 2018. An integer between 1 and 4.
 #' @param split `TRUE`/`FALSE`, indicating whether the matrix produced should be
-#'   split into a survival matrix and a fertility matrix. If true, then the
-#'   output becomes a list with a matrix in each element. Otherwise, the output
-#'   is a single matrix. Default is `TRUE`
+#'   split into a survival matrix and a reproductive output matrix. If true,
+#'   then the output becomes a list with a matrix in each element. Otherwise,
+#'   the output is a single matrix. Default is `TRUE`.
 #'
 #' @return Returns a random matrix population model with characteristics
 #'   determined by the archetype selected and fecundity vector. If split = TRUE,
-#'   the matrix is split into separate fertility and a growth/survival matrices,
-#'   returned as a list.
+#'   the matrix is split into separate reproductive output and growth/survival
+#'   matrices, returned as a list.
 #' @family Lefkovitch matrices
 #' @author Owen Jones <jones@biology.sdu.dk>
 #'
@@ -189,7 +191,7 @@ rand_lefko_mpm <- function(n_stages,
       b <- mat_U
       mat_U <- mat_U[, order(colSums(b))]
     }
-    # Archetype 3 - Fertility is in top right corner only. Non-zero transitions
+    # Archetype 3 - fecundity is in top right corner only. Non-zero transitions
     # only on diagonal and subdiagonal.
     if (archetype == 3) {
       if (n_stages == 2) {
@@ -208,7 +210,7 @@ rand_lefko_mpm <- function(n_stages,
       mat_U <- mat_U[1:n_stages, 1:n_stages]
     }
 
-    # Archetype 4 - As in archetype 3, Fertility is in top right corner only.
+    # Archetype 4 - As in archetype 3, fecundity is in top right corner only.
     # Non-zero transitions only on diagonal and subdiagonal. However in
     # addition, there is also a rule of increasing survival from stage to stage
     # as in Archetype 2.
@@ -233,13 +235,13 @@ rand_lefko_mpm <- function(n_stages,
       mat_U[mat_U == 1] <- surv
     }
 
-    # Fecundity
+    # fecundity
     if (inherits(fecundity, "numeric")) {
       # Create an empty matrix to initialise.
       mat_F <- matrix(0, nrow = n_stages, ncol = n_stages)
-      # Calculate Fecundity and place in top row. In the Takada archetypes,
+      # Calculate fecundity and place in top row. In the Takada archetypes,
       # fecundity is ONLY placed in the top right. Here, if the length of the
-      # fecundity vector (fecundity) is 1, then that is exactly what we do...
+      # fecundity vector is 1, then that is exactly what we do...
 
       if (length(fecundity) == 1) {
         mat_F[1, n_stages] <- fecundity

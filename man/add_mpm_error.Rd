@@ -14,26 +14,26 @@ add_mpm_error(mat_U, mat_F, sample_size, split = TRUE, by_type = TRUE)
 
 \item{sample_size}{either (1) a single matrix of sample sizes for each
 element of every MPM, (2) a list of two named matrices ("\code{mat_F_ss}",
-"\code{mat_U_ss}") containing sample sizes for the survival and fertility
-submatrices of every MPM or (3) a single value applied to the every element
-of every matrix.}
+"\code{mat_U_ss}") containing sample sizes for the survival and reproductive
+output submatrices of every MPM or (3) a single value applied to the every
+element of every matrix.}
 
-\item{split}{logical, whether to split the output into survival and fecundity
-matrices or not. Defaults to \code{TRUE}.}
+\item{split}{logical, whether to split the output into survival and
+reproductive output matrices or not. Defaults to \code{TRUE}.}
 
 \item{by_type}{A logical indicating whether the matrices should be returned
 in a list by type (A, U, F, C). If split is \code{FALSE}, then \code{by_type} must
 also be \code{FALSE}. Defaults to \code{TRUE}.}
 }
 \value{
-list of matrices of survival and fecundity if \code{split = TRUE},
-otherwise a single matrix of the sum of survival and fecundity.
+list of matrices of survival and reproductive output if \code{split = TRUE}, otherwise a single matrix of the sum of survival and reproductive
+output.
 }
 \description{
 Produces a list of matrix population models based on expected values in the
 transition matrix and sample size. The expected values are provided in lists
 of two submatrices: \code{mat_U} for the growth/development and survival
-transitions and \code{mat_F} for the fecundity transitions. The output \code{mat_U}
+transitions and \code{mat_F} for the reproductive transitions. The output \code{mat_U}
 values are simulated based on expected probabilities, assuming a binomial
 process with a sample size defined by \code{sample_size}. The output \code{mat_F}
 values are simulated using a Poisson process with a sample size defined by
@@ -62,7 +62,7 @@ add_mpm_error(
 # Also works with a single matrix.
 mats <- make_leslie_mpm(
   survival = c(0.1, 0.2, 0.5),
-  fertility = c(0, 1.2, 2.4),
+  fecundity = c(0, 1.2, 2.4),
   n_stages = 3, split = TRUE
 )
 
@@ -70,7 +70,7 @@ mats <- make_leslie_mpm(
 add_mpm_error(mat_U = mats$mat_U, mat_F = mats$mat_F, sample_size = 20)
 
 # Sample size is a list of two matrices
-# here with a sample size of 20 for reproduction and 10 for growth/survival.
+# here with a sample size of 20 for fecundity and 10 for growth/survival.
 mpm_set <- rand_lefko_set(
   n = 5, n_stages = 3, fecundity = c(0, 2, 4),
   archetype = 4, output = "Type4"

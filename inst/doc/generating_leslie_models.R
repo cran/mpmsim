@@ -93,68 +93,68 @@ plotA + plotB + plotC + plotD + plotE + plotFF
 ## ----echo = FALSE, message=FALSE, fig.height=4, fig.width =8------------------
 baseDF <- data.frame(x = 0:20)
 
-# Compute fertility using the step model
+# Compute fecundity using the step model
 stepMod <- baseDF %>%
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(A = 10), maturity = 6,
     model = "step"
   ))
 
-plotA <- ggplot(stepMod, aes(x = x, y = fert)) +
+plotA <- ggplot(stepMod, aes(x = x, y = fecundity)) +
   geom_line() +
   xlab("Age") +
-  ylab("Fertility") +
+  ylab("Fecundity") +
   ggtitle("A) Step")
 
-# Compute fertility using the logistic model
+# Compute fecundity using the logistic model
 logisticMod <- baseDF %>%
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(A = 10, k = 0.5, x_m = 8), maturity =
       0, model = "logistic"
   ))
 
-plotB <- ggplot(logisticMod, aes(x = x, y = fert)) +
+plotB <- ggplot(logisticMod, aes(x = x, y = fecundity)) +
   geom_line() +
   xlab("Age") +
-  ylab("Fertility") +
+  ylab("Reproduction") +
   ggtitle("B) Logistic")
 
-# Compute fertility using the von Bertalanffy model
+# Compute fecundity using the von Bertalanffy model
 
 vonBertMod <- baseDF %>%
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(A = 10, k = .5), maturity = 2, model =
       "vonbertalanffy"
   ))
 
-plotC <- ggplot(logisticMod, aes(x = x, y = fert)) +
+plotC <- ggplot(vonBertMod, aes(x = x, y = fecundity)) +
   geom_line() +
   xlab("Age") +
-  ylab("Fertility") +
+  ylab("Reproduction") +
   ggtitle("C) von Bertalanffy")
 
-# Compute fertility using the normal model
+# Compute fecundity using the normal model
 normalMod <- baseDF %>%
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(A = 10, mu = 4, sd = 2), maturity = 0,
     model = "normal"
   ))
-plotD <- ggplot(normalMod, aes(x = x, y = fert)) +
+plotD <- ggplot(normalMod, aes(x = x, y = fecundity)) +
   geom_line() +
   xlab("Age") +
-  ylab("Fertility") +
+  ylab("Reproduction") +
   ggtitle("D) Normal")
 
-# Compute fertility using the Hadwiger model
+# Compute fecundity using the Hadwiger model
 hadwigerMod <- data.frame(x = 0:50) %>%
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(a = 0.91, b = 3.85, C = 29.78),
     maturity = 0, model = "hadwiger"
   ))
-plotE <- ggplot(hadwigerMod, aes(x = x, y = fert)) +
+plotE <- ggplot(hadwigerMod, aes(x = x, y = fecundity)) +
   geom_line() +
   xlab("Age") +
-  ylab("Fertility") +
+  ylab("Reproduction") +
   ggtitle("E) hadwiger")
 
 
@@ -170,16 +170,16 @@ ggplot(lt1, aes(x = x, y = hx)) +
 
 ## -----------------------------------------------------------------------------
 (lt1 <- lt1 |>
-  mutate(fert = model_fertility(
+  mutate(fecundity = model_fecundity(
     age = x, params = c(A = 3),
     maturity = 3,
     model = "step"
   )))
 
 ## ----echo = TRUE, message=FALSE, fig.height=4, fig.width =8-------------------
-ggplot(lt1, aes(x = x, y = fert)) +
+ggplot(lt1, aes(x = x, y = fecundity)) +
   geom_line() +
-  ggtitle("Step fertility, maturity at age 3")
+  ggtitle("Step fecundity, maturity at age 3")
 
 ## -----------------------------------------------------------------------------
 make_leslie_mpm(lifetable = lt1)
@@ -190,7 +190,7 @@ mortParams <- data.frame(
   maxVal = c(0.05, 0.15, 0.2)
 )
 
-fertParams <- data.frame(
+fecundityParams <- data.frame(
   minVal = 2,
   maxVal = 10
 )
@@ -200,10 +200,10 @@ maturityParam <- c(0, 0)
 (myMatrices <- rand_leslie_set(
   n_models = 50,
   mortality_model = "GompertzMakeham",
-  fertility_model = "step",
+  fecundity_model = "step",
   mortality_params = mortParams,
-  fertility_params = fertParams,
-  fertility_maturity_params = maturityParam,
+  fecundity_params = fecundityParams,
+  fecundity_maturity_params = maturityParam,
   dist_type = "uniform",
   output = "Type1"
 ))

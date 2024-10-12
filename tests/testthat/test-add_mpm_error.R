@@ -1,6 +1,6 @@
 mats <- make_leslie_mpm(
   survival = c(0.1, 0.2, 0.5),
-  fertility = c(0, 1.2, 2.4),
+  fecundity = c(0, 1.2, 2.4),
   n_stages = 3,
   split = TRUE
 )
@@ -30,7 +30,7 @@ test_that("Checkadd_mpm_error functions correctly", {
 
 mats <- make_leslie_mpm(
   survival = c(0.1, 0.2, 0.5),
-  fertility = c(0, 1.2, 2.4),
+  fecundity = c(0, 1.2, 2.4),
   n_stages = 3,
   split = TRUE
 )
