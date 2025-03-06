@@ -3,6 +3,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 set.seed(42)
 
 ## ----message=FALSE------------------------------------------------------------
@@ -12,7 +13,7 @@ library(Rage)
 library(ggplot2)
 library(Rcompadre)
 
-## ----echo = FALSE, message=FALSE, fig.height=4, fig.width =8------------------
+## ----echo = FALSE, message=FALSE, fig.height=4, fig.width =8, dpi = 72, fig.alt="Examples of mortality functions used in mpmsim's model_mortality function"----
 require(patchwork)
 A <- model_mortality(
   params = c(b_0 = 0.01, b_1 = 0.5),
@@ -90,7 +91,7 @@ plotFF <- ggplot(FF, aes(x = x, y = hx)) +
 
 plotA + plotB + plotC + plotD + plotE + plotFF
 
-## ----echo = FALSE, message=FALSE, fig.height=4, fig.width =8------------------
+## ----echo = FALSE, message=FALSE, fig.height=4, fig.width =8, dpi = 72, fig.alt="Examples of mortality functions used in mpmsim's model_reproduction function"----
 baseDF <- data.frame(x = 0:20)
 
 # Compute fecundity using the step model
@@ -163,7 +164,7 @@ plotA + plotB + plotC + plotD + plotE
 ## -----------------------------------------------------------------------------
 (lt1 <- model_mortality(params = c(b_0 = 0.1, b_1 = 0.2), model = "Gompertz"))
 
-## ----echo = TRUE, message=FALSE, fig.height=4, fig.width =8-------------------
+## ----echo = TRUE, message=FALSE, fig.height=4, fig.width =8, fig.alt="An illustration of Gompertz mortality"----
 ggplot(lt1, aes(x = x, y = hx)) +
   geom_line() +
   ggtitle("Gompertz mortality (b_0 = 0.1, b_1 = 0.2)")
@@ -176,7 +177,7 @@ ggplot(lt1, aes(x = x, y = hx)) +
     model = "step"
   )))
 
-## ----echo = TRUE, message=FALSE, fig.height=4, fig.width =8-------------------
+## ----echo = TRUE, message=FALSE, fig.height=4, fig.width =8, dpi = 72, fig.alt="An illustration of step mortality"----
 ggplot(lt1, aes(x = x, y = fecundity)) +
   geom_line() +
   ggtitle("Step fecundity, maturity at age 3")

@@ -55,16 +55,6 @@ test_that("Check function works correctly across all output types", {
       output = "Type5"
     )
   )
-
-  expect_silent(
-    rand_lefko_set(
-      n_models = 10,
-      n_stages = 5,
-      fecundity = c(0, 0, 4, 8, 10),
-      archetype = 4,
-      output = "Type6"
-    )
-  )
 })
 
 

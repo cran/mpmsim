@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mpmsim <img src="man/figures/logo_mpmsim.png" align="right" height="100" style="float:right; height:100px;">
+# mpmsim <img src="man/figures/logo_mpmsim.png" alt="mpmsim package logo, featuring a stylized matrix population model diagram" align="right" height="100" style="float:right; height:100px;">
 
 <!-- badges: start -->
 <!--- BE CAREFUL WITH THE FORMATTING --->
@@ -14,6 +14,9 @@
 | ![](http://cranlogs.r-pkg.org/badges/mpmsim) |  |  |
 | [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/mpmsim)](https://cran.r-project.org/package=mpmsim) |  |  |
 
+[![R-CMD-check](https://github.com/jonesor/mpmsim/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jonesor/mpmsim/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jonesor/mpmsim/graph/badge.svg)](https://app.codecov.io/gh/jonesor/mpmsim)
 <!-- badges: end -->
 
 `mpmsim` contains tools for generating random or semi-random matrix
@@ -70,18 +73,18 @@ model (Leslie, 1945) where the stages represent discrete age classes
 (usually years of life).
 
 In a Leslie matrix, survival is represented in the lower sub-diagonal
-and the lower-right-hand corner element, while reproduction is shown in
-the top row. Both survival and reproduction have a length equal to the
-number of stages in the model. Users can specify both survival and
-reproduction as either a single value or a vector of values, with a
+and the lower-right-hand corner element, while fecundity (reproduction)
+is shown in the top row. Both survival and fecundity have a length equal
+to the number of stages in the model. Users can specify both survival
+and fecundity as either a single value or a vector of values, with a
 length equal to the dimensions of the matrix model. If these arguments
-are single values, the value is repeated along the survival/reproduction
+are single values, the value is repeated along the survival/fecundity
 sequence.
 
 ``` r
 make_leslie_mpm(
   survival = seq(0.1, 0.45, length.out = 4),
-  reproduction = c(0, 0, 2.4, 5), n_stages = 4, split = FALSE
+  fecundity = c(0, 0, 2.4, 5), n_stages = 4, split = FALSE
 )
 #>      [,1]      [,2]      [,3] [,4]
 #> [1,]  0.0 0.0000000 2.4000000 5.00
@@ -90,7 +93,7 @@ make_leslie_mpm(
 #> [4,]  0.0 0.0000000 0.3333333 0.45
 ```
 
-### Using functional forms for mortality and reproduction
+### Using functional forms for mortality and fecundity
 
 Users can generate Leslie matrices with particular functional forms of
 mortality by first making a data frame of a simplified life table that
@@ -118,26 +121,26 @@ For example to produce a life table based on Gompertz mortality:
 #> 6 5 1.4778112 0.03928123 0.8413767 0.1586233
 ```
 
-Users can also use a functional form for reproduction (see
-`?model_reproduction`), including, logistic, step, von Bertalanffy,
-Normal and Hadwiger.
+Users can also use a functional form for fecundity (see
+`?model_fecundity`), including, logistic, step, von Bertalanffy, Normal
+and Hadwiger.
 
 Here a simple step function is assumed.
 
 ``` r
 survival <- surv_prob$px
-reproduction <- model_reproduction(
+fecundity <- model_fecundity(
   age = 0:(length(survival) - 1),
   params = c(A = 5), maturity = 2, model = "step"
 )
 ```
 
-Subsequently, these survival and reproduction values can be applied to
-the Leslie matrix as follows.
+Subsequently, these survival and fecundity values can be applied to the
+Leslie matrix as follows.
 
 ``` r
 make_leslie_mpm(
-  survival = survival, reproduction = reproduction,
+  survival = survival, fecundity = fecundity,
   n_stages = length(survival), split = FALSE
 )
 #>           [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
@@ -161,15 +164,15 @@ reproduction are provided as defined distributions from which parameters
 can be drawn at random. The type of distribution is defined with the
 `dist_type` argument and can be `uniform` or `normal`, and the
 distributions are defined using the `mortality_params` and
-`reproduction_params` arguments, which accept data frames of
-distribution parameters.
+`fecundity_params` arguments, which accept data frames of distribution
+parameters.
 
 For example, the following code produces a list of five Leslie matrices
 that have Gompertz-Makeham mortality characteristics and where
 reproduction is a step function.
 
 First, we define the limits of a uniform distributions for the Gompertz
-mortality and step reproduction functions.
+mortality and step fecundity functions.
 
 ``` r
 mortParams <- data.frame(
@@ -177,7 +180,7 @@ mortParams <- data.frame(
   maxVal = c(0.14, 0.15, 0.7)
 )
 
-fertParams <- data.frame(minVal = 4, maxVal = 6)
+fecParams <- data.frame(minVal = 4, maxVal = 6)
 ```
 
 We also set maturity to be drawn from a distribution ranging from 0 to
@@ -193,10 +196,10 @@ submatrices (e.g. the U and F matrices), or as a `CompadreDB` object.
 
 ``` r
 outputMPMs <- rand_leslie_set(
-  n_models = 5, mortality_model = "GompertzMakeham", reproduction_model = "step",
+  n_models = 5, mortality_model = "GompertzMakeham", fecundity_model = "step",
   mortality_params = mortParams,
-  reproduction_params = fertParams,
-  reproduction_maturity_params = maturityParams,
+  fecundity_params = fecParams,
+  fecundity_maturity_params = maturityParams,
   dist_type = "uniform",
   output = "Type5"
 )
@@ -274,7 +277,7 @@ model.
 
 ``` r
 (rMPM <- rand_lefko_mpm(
-  n_stages = 3, reproduction = 20,
+  n_stages = 3, fecundity = 20,
   archetype = 2, split = TRUE
 ))
 #> $mat_A
@@ -312,7 +315,7 @@ returns a `list` object.
 library(popbio)
 constrain_df <- data.frame(fun = "lambda", arg = NA, lower = 0.9, upper = 1.1)
 rand_lefko_set(
-  n_models = 5, n_stages = 4, reproduction = 8, archetype = 1, constraint = constrain_df,
+  n_models = 5, n_stages = 4, fecundity = 8, archetype = 1, constraint = constrain_df,
   output = "Type5"
 )
 #> [[1]]
@@ -427,7 +430,7 @@ sample size of 1000, and then with a sample size of seven.
 ``` r
 mats <- make_leslie_mpm(
   survival = c(0.3, 0.5, 0.8),
-  reproduction = c(0, 2.2, 4.4),
+  fecundity = c(0, 2.2, 4.4),
   n_stages = 3, split = TRUE
 )
 
@@ -524,7 +527,7 @@ p <- plot_matrix(rMPM$mat_U)
 p + ggplot2::scale_fill_gradient(low = "black", high = "yellow")
 ```
 
-<img src="man/figures/plot_a_matrix01.png" width="300" style="display: block; margin: auto;" />
+<img src="man/figures/plot_a_matrix01.png" alt="A visualised matrix model" style="display: block; margin: auto;" />
 
 ## References
 
